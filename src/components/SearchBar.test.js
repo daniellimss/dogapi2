@@ -1,19 +1,19 @@
 import React from 'react';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
-import SearchBar from './components/SearchBar';
+import SearchBar from './SearchBar';
 
 afterEach(() => {
   cleanup();
 })
-describe('SearchBar', () => {
+describe('input field', () => {
   it('renders without errors', () => {
     render(<SearchBar />);
     const inputElement = screen.getByRole("input")
     expect(inputElement).toBeInTheDocument();
+    // const { getByPlaceholderText } = render(<SearchBar />)
+    // expect(getByPlaceholderText('Enter a breed name')).toBeInTheDocument();
   });
-  // it('Enter a breed name', () => {
-  //   console.log('testing 123')
-  // })
+
   // it('handles input changes', () => {
   //   render(<SearchBar />);
   //   const inputElement = screen.getByRole("input");
