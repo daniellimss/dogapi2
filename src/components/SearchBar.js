@@ -7,6 +7,7 @@ import { SearchResults } from "./SearchResults";
 
 export const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [idFromButtonClick, setIdFromButtonClick] = useState("");
   const [dogData, setDogData] = useState([]);
   // const [results, setResults] = useState([]);
   // const [breedData, setBreedData] = useState(null);
@@ -15,6 +16,34 @@ export const SearchBar = () => {
   const API_KEY = process.env.REACT_APP_API_KEY;
   const API_URL = process.env.REACT_APP_API_URL;
 
+
+
+
+
+  // const search = (searchTerm) => {
+  //   axios
+  //     .get(API_URL, {
+  //       headers: {
+  //         "x-api-key": API_KEY,
+  //       },
+  //       params: {
+  //         q: searchTerm,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       console.log(response.data); //gives all the available breed
+  //       setDogData(response.data)
+  //     })
+
+  //     //}
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+
+  // }
+
+
+  //Below is with the debounced function :
   const debounce = (func, delay) => {
     let timeoutId;
     return function (...args) {
@@ -27,9 +56,12 @@ export const SearchBar = () => {
     };
   };
 
-
-
-  const search = (searchTerm) => {
+  const debouncedOnChange = (e) => {
+    const { value } = e.target
+    setSearchTerm(value)
+    debouncedSearch(value)
+  }
+  const fetchResults = () => {
     axios
       .get(API_URL, {
         headers: {
@@ -42,17 +74,51 @@ export const SearchBar = () => {
       .then((response) => {
         console.log(response.data); //gives all the available breed
         setDogData(response.data)
+
       })
 
       //}
       .catch((err) => {
         console.log(err);
       });
-
   }
 
-  const debouncedSearch = debounce(search, 3000);
-  //=========================================================================== 
+  const debouncedSearch = debounce(fetchResults, 5000);
+
+  //-------------below is with button, without debounced------------
+  // const handleInputChange = (e) => {
+  //   setSearchTerm(e.target.value);
+  // };
+
+  // const handleSearch = () => {
+  //   setIdFromButtonClick(searchTerm);
+  // }
+
+  // useEffect(() => {
+  //   axios
+  //     .get(API_URL, {
+  //       headers: {
+  //         "x-api-key": API_KEY,
+  //       },
+  //       params: {
+  //         q: idFromButtonClick,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       console.log(response.data); //gives all the available breed
+  //       setDogData(response.data)
+  //     })
+
+  //     //}
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, [idFromButtonClick])
+  // ---------------------------------------------------------------
+
+
+  //================================================================
+  //
   // if (searchTerm.trim() === "") {
   //   setDogData([]);
   //   return;
@@ -70,13 +136,13 @@ export const SearchBar = () => {
     }
   }
  */
+  //==================================================================
 
 
 
 
 
-
-  //================== Below is without debounce ============================
+  //===Below is without debounce and without button first version===
   // const handleSearch = async () => {
   //   try {
   //     const response = await axios.get(API_URL, {
@@ -102,11 +168,6 @@ export const SearchBar = () => {
   //   }
   // }
 
-  const handleInputChange = (e) => {
-    const newSearchTerm = e.target.value;
-    setSearchTerm(newSearchTerm);
-    debouncedSearch(newSearchTerm);
-  };
 
   return (
     <div>
@@ -115,11 +176,11 @@ export const SearchBar = () => {
         <input
           type="text"
           placeholder="Enter a breed name"
-          onChange={handleInputChange}
-          // onChange={debouncedOnChange}
+          // onChange={handleInputChange}
+          onChange={debouncedOnChange}
           value={searchTerm}
         />
-        {/* <button onClick={handleSearch}>Search</button> */}
+        {/* {<button onClick={handleSearch}>Search</button>} */}
       </div>
       {loading && <p className="loading-msg">Loading...</p>}
       <div>
