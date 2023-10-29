@@ -86,9 +86,13 @@ export const SearchBar = () => {
   const debouncedSearch = debounce(fetchResults, 5000);
 
   //-------------below is with button, without debounced------------
+  //Use the state (IdFromButtonClick) from the button as the value for the useEffect's params, but the button's state is still taken from the input's box's state i.e.handleInputChange 
+
+
   // const handleInputChange = (e) => {
   //   setSearchTerm(e.target.value);
   // };
+
 
   // const handleSearch = () => {
   //   setIdFromButtonClick(searchTerm);
